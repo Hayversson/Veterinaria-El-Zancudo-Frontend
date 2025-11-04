@@ -1,0 +1,82 @@
+# -----------------------
+# Node.js dependencies
+# -----------------------
+node_modules/
+package-lock.json
+yarn.lock
+.pnpm-lock.yaml
+
+# -----------------------
+# Angular / Frontend
+# -----------------------
+dist/
+out-tsc/
+coverage/
+.angular/cache/
+.tmp/
+.build/
+*.tsbuildinfo
+
+# -----------------------
+# Environment / secrets
+# -----------------------
+.env
+.env.*.local
+*.secret.json
+config.json
+credentials.json
+*.key
+*.pem
+
+# -----------------------
+# IDE / Editor files
+# -----------------------
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.history/
+*.vscode-test/
+
+# -----------------------
+# System files
+# -----------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.~*
+.*.swp
+
+# -----------------------
+# Logs / temporary
+# -----------------------
+*.log
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+
+# -----------------------
+# Archives / packages
+# -----------------------
+*.tgz
+*.tar
+*.zip
+*.rar
+*.7z
+
+# -----------------------
+# Coverage / Testing
+# -----------------------
+karma-reports/
+junit-reports/
+test-results/

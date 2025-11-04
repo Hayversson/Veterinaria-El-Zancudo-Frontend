@@ -1,0 +1,145 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">Gestión de Animales</h4>
+        <!-- Botón para abrir modal de creación -->
+        <button class="btn btn-primary" (click)="abrirModal()">Crear Animal</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="title">Listado de Animales</h5>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover">
+          <thead class="text-primary">
+            <tr>
+              <th>Nombre</th>
+              <th>Edad</th>
+              <th>ID Usuario</th>
+              <th>ID Animal</th>
+              <th>ID Género</th>
+              <th>ID Raza</th>
+              <th>Fecha Creación</th>
+              <th>Fecha Edición</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let animal of animales">
+              <td>{{ animal.nombre_animal }}</td>
+              <td>{{ animal.edad_animal }}</td>
+              <td>{{ animal.id_usuario }}</td>
+              <td>{{ animal.id_animal }}</td>
+              <td>{{ animal.id_genero }}</td>
+              <td>{{ animal.id_raza }}</td>
+              <td>{{ animal.fecha_creacion | date: 'short' }}</td>
+              <td>{{ animal.fecha_edicion | date: 'short' }}</td>
+              <td>
+                <button class="btn btn-warning btn-sm me-2" (click)="editarAnimal(animal)">
+                  <i class="bi bi-pencil-square"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarAnimal(animal.id_animal)">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal CREAR ANIMAL -->
+<div class="modal fade" #crearAnimalModal tabindex="-1" aria-labelledby="crearAnimalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="crearAnimalModalLabel">Crear Animal</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label>Nombre</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.nombre_animal" name="nombre_animal">
+          </div>
+          <div class="mb-3">
+            <label>Edad</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.edad_animal" name="edad_animal">
+          </div>
+          <div class="mb-3">
+            <label>ID Género</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.id_genero" name="id_genero">
+          </div>
+          <div class="mb-3">
+            <label>ID Raza</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.id_raza" name="id_raza">
+          </div>
+          <div class="mb-3">
+            <label>ID Usuario</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.id_usuario" name="id_usuario">
+          </div>
+          <div class="mb-3">
+            <label>ID Usuario Crea</label>
+            <input type="text" class="form-control" [(ngModel)]="nuevoAnimal.id_usuario_crea" name="id_usuario_crea">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="crearAnimal()">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--EN CONTRUCCIÓN -->
+<!-- 🔹 Modal EDITAR ANIMAL -->
+<div class="modal fade" #editarAnimalModal tabindex="-1" aria-labelledby="editarAnimalModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="editarAnimalModalLabel">Editar Animal</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label>ID Animal</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.id_animal" name="id_animal" readonly>
+          </div>
+          <div class="mb-3">
+            <label>Nombre del Animal</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.nombre_animal" name="nombre_animal">
+          </div>
+          <div class="mb-3">
+            <label>Edad</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.edad_animal" name="edad_animal">
+          </div>
+          <div class="mb-3">
+            <label>ID Género</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.id_genero" name="id_genero">
+          </div>
+          <div class="mb-3">
+            <label>ID Raza</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.id_raza" name="id_raza">
+          </div>
+          <div class="mb-3">
+            <label>ID Usuario que Edita</label>
+            <input type="text" class="form-control" [(ngModel)]="animalForm.id_usuario_edita" name="id_usuario_edita">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-warning text-white" (click)="guardarCambios()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
