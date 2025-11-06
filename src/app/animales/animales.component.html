@@ -10,6 +10,26 @@
       </div>
     </div>
 
+    <!--Buscar por ID de propietario -->
+<div class="row mb-3">
+  <div class="col-md-5">
+    <div class="d-flex align-items-center gap-2">
+      <input
+        type="text"
+        #propietarioIdInput
+        class="form-control form-control-sm"
+        placeholder="ID del propietario"
+      />
+      <button
+        class="btn btn-info btn-sm text-white"
+        (click)="buscarAnimalesPorPropietario(propietarioIdInput.value)"
+      >
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+  </div>
+</div>
+
     <div class="card">
       <div class="card-header">
         <h5 class="title">Listado de Animales</h5>
