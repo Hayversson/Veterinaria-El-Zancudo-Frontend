@@ -159,7 +159,7 @@ export class AnimalesComponent implements OnInit {
       id_raza: this.animalForm.id_raza
     };
     
-      console.log('📦 Payload que se enviará:', payload); // 👈 AGREGA ESTO
+      console.log('📦 Payload que se enviará:', payload); 
 
     this.http.put<any>(url, payload).subscribe({
       next: (response) => {
@@ -175,6 +175,30 @@ export class AnimalesComponent implements OnInit {
       error: (err) => {
         console.error('Error al editar animal:', err);
         alert('Error al editar el animal.');
+      }
+    });
+  }
+
+   /*Buscar animales por ID de propietario*/
+  buscarAnimalesPorPropietario(id_usuario: string): void {
+    if (!id_usuario) {
+      alert('Por favor, ingresa un ID de propietario.');
+      return;
+    }
+
+    const url = `${apiUrl}/propietario/${id_usuario}`;
+    this.loading = true;
+    this.error = null;
+
+    this.http.get<any[]>(url).subscribe({
+      next: (data) => {
+        this.animales = data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error al buscar animales por propietario:', err);
+        this.error = 'No se pudieron obtener los animales del propietario.';
+        this.loading = false;
       }
     });
   }
