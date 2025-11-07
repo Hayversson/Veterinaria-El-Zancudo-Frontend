@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { environment } from '../../environments/environment';
+const apiUrl = environment.apiUrl + '/animales';
 declare const bootstrap: any;
 
 @Component({
@@ -14,7 +15,6 @@ export class AnimalesComponent implements OnInit {
   loading: boolean = false;
   error: string | null = null;
 
-  apiUrl: string = 'http://localhost:8000/animales';
 
   // Formulario del nuevo animal
   nuevoAnimal = {
@@ -52,7 +52,7 @@ export class AnimalesComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.http.get<any[]>(this.apiUrl).subscribe({
+    this.http.get<any[]>(apiUrl).subscribe({
       next: (data) => {
         this.animales = data;
         this.loading = false;
@@ -77,7 +77,7 @@ export class AnimalesComponent implements OnInit {
 
   /** Crear Animal */
   crearAnimal(): void {
-    this.http.post<any>(this.apiUrl, this.nuevoAnimal).subscribe({
+    this.http.post<any>(apiUrl, this.nuevoAnimal).subscribe({
       next: (res) => {
         this.animales.push(res);
         this.cerrarModal();
@@ -100,7 +100,7 @@ export class AnimalesComponent implements OnInit {
   eliminarAnimal(id_animal: string): void {
     if (!confirm('¿Seguro que deseas eliminar este animal?')) return;
 
-    const url = `${this.apiUrl}/${id_animal}`;
+    const url = `${apiUrl}/${id_animal}`;
     console.log('🗑️ Eliminando animal con ID:', id_animal);
 
     this.http.delete<any>(url).subscribe({
@@ -151,14 +151,15 @@ export class AnimalesComponent implements OnInit {
   }
   // Guardar cambios del animal editado
   guardarCambios(): void {
-    const url = `${this.apiUrl}/${this.animalForm.id_animal}`;
+    const url = `${apiUrl}/${this.animalForm.id_animal}?id_usuario_edita=${this.animalForm.id_usuario_edita}`; //la petición requería el query usuario que edita no en el body sino en la url, así lo diga en el request body
     const payload = {
       nombre_animal: this.animalForm.nombre_animal,
       edad_animal: this.animalForm.edad_animal,
       id_genero: this.animalForm.id_genero,
-      id_raza: this.animalForm.id_raza,
-      id_usuario_edita: this.animalForm.id_usuario_edita
+      id_raza: this.animalForm.id_raza
     };
+    
+      console.log('📦 Payload que se enviará:', payload); // 👈 AGREGA ESTO
 
     this.http.put<any>(url, payload).subscribe({
       next: (response) => {
