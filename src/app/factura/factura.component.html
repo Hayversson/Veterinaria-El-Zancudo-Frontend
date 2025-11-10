@@ -1,0 +1,56 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Listado de Facturas</h4>
+          <!-- Aquí puedes agregar un botón para crear nuevas facturas -->
+          <!-- <button class="btn btn-primary btn-round" (click)="abrirModalCrear()">Crear Factura</button> -->
+        </div>
+        <div class="card-body">
+
+          <!-- Mensaje de Carga -->
+          <div *ngIf="loading" class="text-center">
+            <p>Cargando facturas...</p>
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+
+          <!-- Mensaje de Error -->
+          <div *ngIf="error" class="alert alert-danger">
+            <strong>Error:</strong> {{ error }}
+          </div>
+
+          <!-- Tabla de Facturas -->
+          <div *ngIf="!loading && !error" class="table-responsive">
+            <table class="table">
+              <thead class="text-primary">
+                <!-- Ajusta las columnas según los datos de tu API de facturas -->
+                <th>ID Factura</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th class="text-right">Acciones</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let factura of facturas">
+                  <!-- Muestra los datos de cada factura -->
+                  <td>{{ factura.id_factura }}</td>
+                  <td>{{ factura.nombre_cliente }}</td>
+                  <td>{{ factura.fecha | date: 'dd/MM/yyyy' }}</td>
+                  <td>{{ factura.total | currency:'USD' }}</td>
+                  <td class="text-right">
+                    <!-- Aquí puedes agregar botones para editar o eliminar -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
