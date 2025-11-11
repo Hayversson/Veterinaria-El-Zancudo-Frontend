@@ -8,6 +8,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 
@@ -15,6 +16,8 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 
 @NgModule({
   imports: [
+    ChartsModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
