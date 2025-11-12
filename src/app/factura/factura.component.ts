@@ -13,7 +13,7 @@ const apiUrl = environment.apiUrl + '/facturas';
 export class FacturaComponent implements OnInit {
 
   facturas: any[] = [];
-  loading: boolean = false;
+  loading = false;
   error: string | null = null;
 
   constructor(private http: HttpClient) { }
@@ -26,18 +26,20 @@ export class FacturaComponent implements OnInit {
    * Obtiene todas las facturas desde la API
    */
   obtenerFacturas(): void {
-    this.loading = true;
-    this.error = null;
+  this.loading = true;
+  this.error = null;
 
-    this.http.get<any[]>(apiUrl).subscribe({
-      next: (data) => {
-        this.facturas = data;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'No se pudieron cargar las facturas. Verifica la conexión con la API.';
-        this.loading = false;
-      }
-    });
-  }
+  this.http.get<any[]>(apiUrl).subscribe({
+    next: (response) => {
+      this.facturas = response;
+      this.loading = false;
+    },
+    error: (error) => {
+      console.error('Error al obtener las facturas:', error);
+      this.error = 'No se pudieron cargar las facturas. Inténtalo más tarde.';
+      this.loading = false;
+    }
+  });
+}
+
 }

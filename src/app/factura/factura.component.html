@@ -1,13 +1,10 @@
-<div class="panel-header panel-header-sm">
-</div>
+<div class="panel-header panel-header-sm"></div>
 <div class="main-content">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title">Listado de Facturas</h4>
-          <!-- Aquí puedes agregar un botón para crear nuevas facturas -->
-          <!-- <button class="btn btn-primary btn-round" (click)="abrirModalCrear()">Crear Factura</button> -->
         </div>
         <div class="card-body">
 
@@ -28,22 +25,36 @@
           <div *ngIf="!loading && !error" class="table-responsive">
             <table class="table">
               <thead class="text-primary">
-                <!-- Ajusta las columnas según los datos de tu API de facturas -->
                 <th>ID Factura</th>
-                <th>Cliente</th>
-                <th>Fecha</th>
-                <th>Total</th>
+                <th>ID Cita</th>
+                <th>ID Usuario Pago</th>
+                <th>Fecha Generación</th>
+                <th>Fecha Pago</th>
+                <th>Costo</th>
+                <th>Pagada</th>
                 <th class="text-right">Acciones</th>
               </thead>
               <tbody>
                 <tr *ngFor="let factura of facturas">
-                  <!-- Muestra los datos de cada factura -->
                   <td>{{ factura.id_factura }}</td>
-                  <td>{{ factura.nombre_cliente }}</td>
-                  <td>{{ factura.fecha | date: 'dd/MM/yyyy' }}</td>
-                  <td>{{ factura.total | currency:'USD' }}</td>
+                  <td>{{ factura.id_cita }}</td>
+                  <td>{{ factura.id_usuario_pago }}</td>
+                  <td>{{ factura.fecha_generacion | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ factura.fecha_pago | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>{{ factura.costo }}</td>
+                  <td>
+                    <span 
+                      class="badge" 
+                      [ngClass]="factura.pagada ? 'bg-success' : 'bg-danger'">
+                      {{ factura.pagada ? 'Sí' : 'No' }}
+                    </span>
+                  </td>
                   <td class="text-right">
-                    <!-- Aquí puedes agregar botones para editar o eliminar -->
+                    <!-- Botones para editar o eliminar -->
+                    <!-- Ejemplo:
+                    <button class="btn btn-sm btn-warning">Editar</button>
+                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                    -->
                   </td>
                 </tr>
               </tbody>
