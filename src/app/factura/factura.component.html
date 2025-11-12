@@ -72,6 +72,11 @@
                     </span>
                   </td>
                   <td class="text-right">
+                    <!-- Botón para Pagar, solo si no está pagada -->
+                    <button *ngIf="factura.pagada === false" class="btn btn-sm btn-success me-2" (click)="pagarFactura(factura)">
+                      Pagar
+                    </button>
+                    <!-- Botones de Editar y Eliminar -->
                     <button class="btn btn-sm btn-warning me-2" (click)="abrirModalEditar(factura)">
                       Editar
                     </button>
@@ -113,6 +118,14 @@
               <div class="form-group">
                 <label>ID Cita</label>
                 <input type="text" class="form-control" [(ngModel)]="facturaSeleccionada.id_cita" name="id_cita" readonly>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Fecha de Pago</label>
+                <input type="datetime-local" class="form-control" [ngModel]="facturaSeleccionada.fecha_pago | date:'yyyy-MM-ddTHH:mm'" (ngModelChange)="facturaSeleccionada.fecha_pago = $event" name="fecha_pago">
               </div>
             </div>
           </div>

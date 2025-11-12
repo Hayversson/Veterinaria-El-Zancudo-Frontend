@@ -32,7 +32,7 @@ export class FacturaComponent implements OnInit {
   facturaSeleccionada: Factura | null = null;
   mostrarModalEditar = false;
   mostrarModalCrear = false;
-  nuevoFactura = {
+  nuevoFactura: { id_cita: string; costo: string; id_usuario_pago: string; } = {
     id_cita: '',
     costo: '',
     id_usuario_pago: ''
@@ -130,7 +130,8 @@ export class FacturaComponent implements OnInit {
     // El payload no debe incluir los IDs que van en la URL
     const payload = {
       costo: facturaActualizada.costo,
-      pagada: facturaActualizada.pagada
+      pagada: facturaActualizada.pagada,
+      fecha_pago: facturaActualizada.fecha_pago
     };
 
     this.http.put<any>(url, payload).subscribe({
@@ -194,6 +195,42 @@ export class FacturaComponent implements OnInit {
       error: (error) => {
         console.error('Error al eliminar la factura:', error);
         this.error = 'Ocurrió un error en la comunicación al intentar eliminar la factura.';
+        this.loading = false;
+      }
+    });
+  }
+
+  /**
+   * Marca una factura como pagada.
+   * @param factura La factura a pagar.
+   */
+  public pagarFactura(factura: Factura): void {
+    const idUsuarioQuePaga = prompt('Por favor, ingresa el ID del usuario que realiza el pago:');
+    if (!idUsuarioQuePaga) {
+      alert('El ID del usuario es requerido para realizar el pago.');
+      return;
+    }
+
+    this.loading = true;
+    this.error = null;
+
+    const url = `${apiUrl}/${factura.id_factura}?id_usuario_edita=${idUsuarioQuePaga}`;
+    const payload = {
+      costo: factura.costo,
+      pagada: true,
+      fecha_pago: new Date().toISOString() // Establece la fecha de pago a la actual
+    };
+
+    this.http.put<any>(url, payload).subscribe({
+      next: (response) => {
+        console.log('Factura pagada exitosamente:', response);
+        alert('Factura marcada como pagada.');
+        this.obtenerFacturas();
+      },
+      error: (httpError) => {
+        console.error('Error al pagar la factura:', httpError);
+        const mensajeError = httpError.error?.mensaje || httpError.message || 'Ocurrió un error desconocido.';
+        this.error = `No se pudo pagar la factura: ${mensajeError}`;
         this.loading = false;
       }
     });
