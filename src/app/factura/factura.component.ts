@@ -32,6 +32,7 @@ export class FacturaComponent implements OnInit {
   facturaSeleccionada: Factura | null = null;
   mostrarModalEditar = false;
   mostrarModalCrear = false;
+  idBusqueda: string = '';
   nuevoFactura: { id_cita: string; costo: string; id_usuario_pago: string; } = {
     id_cita: '',
     costo: '',
@@ -89,6 +90,14 @@ export class FacturaComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  /**
+   * Limpia la búsqueda y recarga todas las facturas.
+   */
+  public limpiarBusqueda(): void {
+    this.idBusqueda = '';
+    this.obtenerFacturas();
   }
 
   /**
