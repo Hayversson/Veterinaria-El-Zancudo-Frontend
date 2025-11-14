@@ -1,0 +1,170 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="content">
+  <div class="container-fluid">
+
+    <!-- Título + Botón Crear -->
+    <div class="row mb-3">
+      <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">Gestión de Usuarios</h4>
+        <button class="btn btn-primary" (click)="crearUsuarioModal.classList.add('show'); crearUsuarioModal.style.display='block'">
+          Crear Usuario
+        </button>
+      </div>
+    </div>
+
+    <!-- Buscador por ID -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Buscar por ID" [(ngModel)]="idBusqueda">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-info" (click)="buscarUsuarioPorId()">Buscar</button>
+      </div>
+    </div>
+
+    <!-- Obtener administradores -->
+    <div class="row mb-3">
+      <div class="col-md-2">
+        <button class="btn btn-secondary" (click)="obtenerAdmins()">Ver Administradores</button>
+      </div>
+    </div>
+
+    <!-- Obtener animales por usuario -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="ID Usuario (animales)" [(ngModel)]="idUsuarioAnimales">
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-warning" (click)="obtenerAnimalesUsuario()">Ver Animales</button>
+      </div>
+    </div>
+
+    <!-- Tabla principal -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Admin</th>
+                    <th>ID Usuario</th>
+                    <th class="text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let u of usuarios">
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.apellido }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.telefono }}</td>
+                    <td>{{ u.es_admin }}</td>
+                    <td>{{ u.id_usuario }}</td>
+                    <td class="text-right">
+                      <button class="btn btn-warning btn-sm" (click)="editarUsuario(u)">Editar</button>
+                      <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u.id_usuario)">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTA DE ANIMALES DEL USUARIO -->
+    <div class="row" *ngIf="animalesUsuario.length > 0">
+      <div class="col-md-12">
+        <h5>Animales del Usuario</h5>
+        <ul>
+          <li *ngFor="let a of animalesUsuario">{{ a.nombre_animal }}</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===========================
+       MODAL CREAR USUARIO
+=========================== -->
+<div class="modal fade" #crearUsuarioModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear Usuario</h5>
+        <button class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3"><label>Nombre</label><input class="form-control" [(ngModel)]="nuevoUsuario.nombre" name="nombre"></div>
+          <div class="mb-3"><label>Apellido</label><input class="form-control" [(ngModel)]="nuevoUsuario.apellido" name="apellido"></div>
+          <div class="mb-3"><label>Email</label><input class="form-control" [(ngModel)]="nuevoUsuario.email" name="email"></div>
+          <div class="mb-3"><label>Teléfono</label><input class="form-control" [(ngModel)]="nuevoUsuario.telefono" name="telefono"></div>
+
+          <div class="mb-3">
+            <label>Administrador</label>
+            <select class="form-control" [(ngModel)]="nuevoUsuario.es_admin" name="es_admin">
+              <option [ngValue]="false">No</option>
+              <option [ngValue]="true">Sí</option>
+            </select>
+          </div>
+
+          <div class="mb-3"><label>Password</label><input type="password" class="form-control" [(ngModel)]="nuevoUsuario.password" name="password"></div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-primary" (click)="crearUsuario()">Crear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===========================
+       MODAL EDITAR USUARIO
+=========================== -->
+<div class="modal fade" #editarUsuarioModal tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title">Editar Usuario</h5>
+        <button class="btn-close" (click)="cerrarModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3"><label>ID Usuario</label><input class="form-control" [(ngModel)]="usuarioForm.id_usuario" name="id_usuario" readonly></div>
+          <div class="mb-3"><label>Nombre</label><input class="form-control" [(ngModel)]="usuarioForm.nombre" name="nombre"></div>
+          <div class="mb-3"><label>Apellido</label><input class="form-control" [(ngModel)]="usuarioForm.apellido" name="apellido"></div>
+          <div class="mb-3"><label>Email</label><input class="form-control" [(ngModel)]="usuarioForm.email" name="email"></div>
+          <div class="mb-3"><label>Teléfono</label><input class="form-control" [(ngModel)]="usuarioForm.telefono" name="telefono"></div>
+
+          <div class="mb-3">
+            <label>Administrador</label>
+            <select class="form-control" [(ngModel)]="usuarioForm.es_admin" name="es_admin">
+              <option [ngValue]="false">No</option>
+              <option [ngValue]="true">Sí</option>
+            </select>
+          </div>
+
+          <div class="mb-3"><label>Password</label><input type="password" class="form-control" [(ngModel)]="usuarioForm.password" name="password"></div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn btn-warning text-white" (click)="guardarCambios()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
