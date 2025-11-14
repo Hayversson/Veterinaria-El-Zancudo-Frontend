@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 
 const apiUrl = 'http://localhost:8000/usuarios';
+const apiUrlAnimales = 'http://localhost:8000/animales';
 
 @Component({
   selector: 'app-usuarios',
@@ -64,9 +65,21 @@ export class UsuariosComponent implements OnInit {
     if (!this.idBusqueda.trim()) return;
 
     this.http.get<any>(`${apiUrl}/${this.idBusqueda}`).subscribe({
-      next: res => this.usuarios = [res],
+      next: res => {
+        this.usuarios = [res];
+        window.scrollTo(0, 0);
+      },
       error: () => alert('Usuario no encontrado')
     });
+  }
+
+  // ---------------------------
+  // Limpiar búsqueda y recargar lista
+  // ---------------------------
+  limpiarBusqueda() {
+    this.idBusqueda = '';
+    this.obtenerUsuarios();
+    window.scrollTo(0, 0);
   }
 
   // ---------------------------
@@ -75,9 +88,17 @@ export class UsuariosComponent implements OnInit {
   obtenerAnimalesUsuario() {
     if (!this.idUsuarioAnimales.trim()) return;
 
-    this.http.get<any[]>(`${apiUrl}/${this.idUsuarioAnimales}/animales`).subscribe({
-      next: res => this.animalesUsuario = res,
-      error: () => alert('No se pudieron obtener los animales del usuario')
+    this.http.get<any[]>(`${apiUrlAnimales}/propietario/${this.idUsuarioAnimales}`).subscribe({
+      next: res => {
+        this.animalesUsuario = res;
+        if (res.length === 0) {
+          alert('Este usuario no tiene animales registrados');
+        }
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        alert('Error al obtener los animales. Verifica que el ID sea correcto.');
+      }
     });
   }
 
@@ -86,8 +107,16 @@ export class UsuariosComponent implements OnInit {
   // ---------------------------
   obtenerAdmins() {
     this.http.get<any[]>(`${apiUrl}/admin/lista`).subscribe({
-      next: res => this.admins = res,
-      error: () => alert('Error al obtener administradores')
+      next: res => {
+        this.admins = res;
+        if (res.length === 0) {
+          alert('No hay administradores registrados');
+        }
+      },
+      error: (err) => {
+        console.error('Error:', err);
+        alert('Error al obtener administradores. Verifica la conexión con la API.');
+      }
     });
   }
 
@@ -170,6 +199,67 @@ export class UsuariosComponent implements OnInit {
           error: () => alert('Error al eliminar usuario')
         });
 
+      }
+    });
+  }
+
+  // ---------------------------
+  // Cambiar contraseña de usuario
+  // ---------------------------
+  cambiarContrasena(idUsuario: string) {
+    Swal.fire({
+      title: 'Cambiar Contraseña',
+      html: `
+        <input type="password" id="nuevaContraseña" class="swal2-input" placeholder="Nueva contraseña" required>
+        <input type="password" id="confirmarContraseña" class="swal2-input" placeholder="Confirmar contraseña" required>
+      `,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Cambiar',
+      preConfirm: () => {
+        const nuevaContraseña = (document.getElementById('nuevaContraseña') as HTMLInputElement).value;
+        const confirmarContraseña = (document.getElementById('confirmarContraseña') as HTMLInputElement).value;
+
+        if (!nuevaContraseña || !confirmarContraseña) {
+          Swal.showValidationMessage('Ambos campos son requeridos');
+          return null;
+        }
+
+        if (nuevaContraseña !== confirmarContraseña) {
+          Swal.showValidationMessage('Las contraseñas no coinciden');
+          return null;
+        }
+
+        if (nuevaContraseña.length < 6) {
+          Swal.showValidationMessage('La contraseña debe tener al menos 6 caracteres');
+          return null;
+        }
+
+        return nuevaContraseña;
+      }
+    }).then(result => {
+      if (result.isConfirmed) {
+        const payload = {
+          password: result.value
+        };
+
+        // Intenta primero con PUT directo al usuario
+        this.http.put<any>(`${apiUrl}/${idUsuario}`, payload).subscribe({
+          next: (response) => {
+            if (response.exito) {
+              Swal.fire('Éxito', response.mensaje || 'Contraseña cambiada correctamente', 'success');
+            } else {
+              Swal.fire('Error', response.mensaje || 'No se pudo cambiar la contraseña', 'error');
+            }
+          },
+          error: (err) => {
+            console.error('Error completo:', err);
+            const mensajeError = err.error?.mensaje || err.message || 'Verifica la ruta en el backend. Intenta PUT /usuarios/{id} o POST /usuarios/{id}/cambiar-password';
+            Swal.fire('Error', mensajeError, 'error');
+          }
+        });
       }
     });
   }

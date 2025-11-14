@@ -21,6 +21,9 @@
       <div class="col-md-2">
         <button class="btn btn-info" (click)="buscarUsuarioPorId()">Buscar</button>
       </div>
+      <div class="col-md-2">
+        <button class="btn btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+      </div>
     </div>
 
     <!-- Obtener administradores -->
@@ -41,6 +44,7 @@
     </div>
 
     <!-- Tabla principal -->
+    <div style="min-height: 60vh;">
     <div class="row">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -78,6 +82,7 @@
         </div>
       </div>
     </div>
+    </div>
 
     <!-- LISTA DE ANIMALES DEL USUARIO -->
     <div class="row" *ngIf="animalesUsuario.length > 0">
@@ -86,6 +91,41 @@
         <ul>
           <li *ngFor="let a of animalesUsuario">{{ a.nombre_animal }}</li>
         </ul>
+      </div>
+    </div>
+
+    <!-- LISTA DE ADMINISTRADORES -->
+    <div class="row" *ngIf="admins.length > 0" class="mt-4">
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-header">
+            <h5 class="card-title">Administradores</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>ID Usuario</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let admin of admins">
+                    <td>{{ admin.nombre }}</td>
+                    <td>{{ admin.apellido }}</td>
+                    <td>{{ admin.email }}</td>
+                    <td>{{ admin.telefono }}</td>
+                    <td>{{ admin.id_usuario }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
