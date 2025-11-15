@@ -13,18 +13,21 @@
       </div>
     </div>
 
-    <!-- Buscador por ID -->
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Buscar por ID" [(ngModel)]="idBusqueda">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-info" (click)="buscarUsuarioPorId()">Buscar</button>
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
-      </div>
-    </div>
+<!-- Buscador por ID -->
+<div class="row mb-3 align-items-center">
+  <div class="col-md-6 d-flex">
+    <input 
+      type="text" 
+      class="form-control me-2" 
+      placeholder="Buscar por ID" 
+      [(ngModel)]="idBusqueda">
+    
+    <button class="btn btn-info me-2" (click)="buscarUsuarioPorId()">Buscar</button>
+
+    <button class="btn btn-secondary" (click)="limpiarBusqueda()">Limpiar</button>
+  </div>
+</div>
+
 
     <!-- Obtener administradores -->
     <div class="row mb-3">
@@ -33,68 +36,7 @@
       </div>
     </div>
 
-    <!-- Obtener animales por usuario -->
-    <div class="row mb-3">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="ID Usuario (animales)" [(ngModel)]="idUsuarioAnimales">
-      </div>
-      <div class="col-md-2">
-        <button class="btn btn-warning" (click)="obtenerAnimalesUsuario()">Ver Animales</button>
-      </div>
-    </div>
-
-    <!-- Tabla principal -->
-    <div style="min-height: 60vh;">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card card-plain">
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class="text-primary">
-                  <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Admin</th>
-                    <th>ID Usuario</th>
-                    <th class="text-right">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let u of usuarios">
-                    <td>{{ u.nombre }}</td>
-                    <td>{{ u.apellido }}</td>
-                    <td>{{ u.email }}</td>
-                    <td>{{ u.telefono }}</td>
-                    <td>{{ u.es_admin }}</td>
-                    <td>{{ u.id_usuario }}</td>
-                    <td class="text-right">
-                      <button class="btn btn-warning btn-sm" (click)="editarUsuario(u)">Editar</button>
-                      <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u.id_usuario)">Eliminar</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-
-    <!-- LISTA DE ANIMALES DEL USUARIO -->
-    <div class="row" *ngIf="animalesUsuario.length > 0">
-      <div class="col-md-12">
-        <h5>Animales del Usuario</h5>
-        <ul>
-          <li *ngFor="let a of animalesUsuario">{{ a.nombre_animal }}</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- LISTA DE ADMINISTRADORES -->
+        <!-- LISTA DE ADMINISTRADORES -->
     <div class="row" *ngIf="admins.length > 0" class="mt-4">
       <div class="col-md-12">
         <div class="card card-plain">
@@ -128,9 +70,80 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
+
+<!-- Obtener animales por usuario -->
+<div class="row mb-3 align-items-center">
+  <div class="col-md-6 d-flex">
+    <input 
+      type="text" 
+      class="form-control thin-input me-2" 
+      placeholder="ID Usuario (animales)" 
+      [(ngModel)]="idUsuarioAnimales">
+
+    <button 
+      class="btn btn-warning thin-btn" 
+      (click)="obtenerAnimalesUsuario()">
+      Ver Animales
+    </button>
+  </div>
+</div>
+
+
+
+
+        <!-- LISTA DE ANIMALES DEL USUARIO -->
+    <div class="row" *ngIf="animalesUsuario.length > 0">
+      <div class="col-md-12">
+        <h5>Animales del Usuario</h5>
+        <ul>
+          <li *ngFor="let a of animalesUsuario">{{ a.nombre_animal }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Tabla principal -->
+    <div style="min-height: 60vh;">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-plain">
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Admin</th>
+                    <th>ID Usuario</th>
+                    <th class="text-right">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let u of usuarios">
+                    <td>{{ u.nombre }}</td>
+                    <td>{{ u.apellido }}</td>
+                    <td>{{ u.email }}</td>
+                    <td>{{ u.telefono }}</td>
+                    <td>{{ u.es_admin ? 'Sí' : 'No' }}</td>
+                    <td>{{ u.id_usuario }}</td>
+                    <td class="text-right">
+                      <button class="btn btn-warning btn-sm" (click)="editarUsuario(u)">Editar</button>
+                      <button class="btn btn-danger btn-sm" (click)="eliminarUsuario(u.id_usuario)">Eliminar</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
 
 <!-- ===========================
        MODAL CREAR USUARIO

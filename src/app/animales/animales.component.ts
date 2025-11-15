@@ -14,7 +14,9 @@ export class AnimalesComponent implements OnInit {
   animales: any[] = [];
   loading: boolean = false;
   error: string | null = null;
-
+  //para razas
+  razas: any[] = [];
+  razasMap: { [id: string]: string } = {};
 
   // Formulario del nuevo animal
   nuevoAnimal = {
@@ -37,6 +39,7 @@ export class AnimalesComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerAnimales();
+    this.cargarRazas(); // si ya lo tienes, aquí mapeas las razas
   }
 
   ngAfterViewInit(): void {
@@ -48,6 +51,38 @@ export class AnimalesComponent implements OnInit {
   /** -------------------------
    *  CRUD BÁSICO
    * ------------------------- */
+  cargarRazas(): void {
+    const urlCandidates = [
+      `${environment.apiUrl}/razas-animal`
+    ];
+ 
+    // Intentamos varias rutas comunes hasta que una responda
+    const tryNext = (index: number) => {
+      if (index >= urlCandidates.length) return;
+      const url = urlCandidates[index];
+      this.http.get<any[]>(url).subscribe({
+        next: (data) => {
+          // Normalizar estructura: buscar campos evidentes
+          this.razas = data || [];
+          this.razasMap = {};
+          this.razas.forEach(r => {
+            const id = r.id_raza || r.id || r._id || r.id_raza_animal;
+            const nombre = r.nombre_raza || r.nombre || r.nombreRaza || r.raza || '';
+            if (id) this.razasMap[id] = nombre || id;
+          });
+        },
+        error: () => {
+          // Intentar siguiente URL
+          tryNext(index + 1);
+        }
+      });
+    };
+ 
+    tryNext(0);
+  }
+ 
+ 
+
   obtenerAnimales(): void {
     this.loading = true;
     this.error = null;
@@ -203,4 +238,7 @@ export class AnimalesComponent implements OnInit {
     });
   }
 
+
+
 }
+
