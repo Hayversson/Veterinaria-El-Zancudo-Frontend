@@ -5,23 +5,20 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { UsuariosComponent } from '../../usuarios/usuarios.component';
 import { AnimalesComponent } from '../../animales/animales.component';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
-import { TableListComponent } from '../../table-list/table-list.component';
-import { TypographyComponent } from '../../typography/typography.component';
-import { IconsComponent } from '../../icons/icons.component';
-import { MapsComponent } from '../../maps/maps.component';
-import { NotificationsComponent } from '../../notifications/notifications.component';
+import { CitasComponent } from '../../citas/citas.component';
+import { FacturaComponent } from '../../factura/factura.component';
 import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
-import { UpgradeComponent } from '../../upgrade/upgrade.component';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
+    ReactiveFormsModule, // ReactiveFormsModule
     ChartsModule,
     NgbModule,
     ToastrModule.forRoot(),
@@ -29,14 +26,10 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
   ],
   declarations: [
     DashboardComponent,
-    UserProfileComponent,
-    TableListComponent,
-    UpgradeComponent,
-    TypographyComponent,
-    IconsComponent,
-    MapsComponent,
-    NotificationsComponent,
-    AnimalesComponent
+    UsuariosComponent,
+    AnimalesComponent,
+    CitasComponent,
+    FacturaComponent
   ]
 })
 

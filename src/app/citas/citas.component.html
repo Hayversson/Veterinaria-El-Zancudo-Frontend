@@ -1,0 +1,232 @@
+<div class="panel-header panel-header-sm"></div>
+
+<div class="content">
+  <div class="container-fluid">
+    <div class="row mb-3">
+      <div class="col-md-12 d-flex justify-content-between align-items-center">
+        <h4 class="card-title mb-0">Gestión de Citas</h4>
+        <button class="btn btn-primary" (click)="abrirModalCrear()">Crear Cita</button>
+      </div>
+    </div>
+
+    <!-- Buscar por ID de animal -->
+    <div class="row mb-3">
+      <div class="col-md-5">
+        <div class="d-flex align-items-center gap-2">
+          <input
+            type="text"
+            #animalIdInput
+            class="form-control form-control-sm"
+            placeholder="ID del animal"
+          />
+          <button
+            class="btn btn-info btn-sm text-white"
+            (click)="buscarCitasPorAnimal(animalIdInput.value)"
+          >
+            <i class="bi bi-search"></i> Buscar
+          </button>
+          <button class="btn btn-secondary btn-sm" (click)="obtenerCitas()">Limpiar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="title">Listado de Citas</h5>
+      </div>
+      <div class="card-body table-responsive">
+        <table class="table table-hover">
+          <thead class="text-primary">
+            <tr>
+              <th>ID Cita</th>
+              <th>ID Servicio</th>
+              <th>ID Animal</th>
+              <th>Fecha Atención</th>
+              <th>Fecha Asignación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cita of citas">
+              <td>{{ cita.id_citas }}</td>
+              <td>{{ cita.id_servicio }}</td>
+              <td>{{ cita.id_animal }}</td>
+              <td>{{ cita.fecha_atencion | date: 'short' }}</td>
+              <td>{{ cita.fecha_asignacion | date: 'short' }}</td>
+              <td>
+                <button class="btn btn-warning btn-sm me-2" (click)="editarCita(cita)">
+                  <i class="bi bi-pencil-square"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm" (click)="eliminarCita(cita.id_citas)">
+                  <i class="bi bi-trash"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="!citas.length && !loading">
+              <td class="text-muted" colspan="6">No hay citas disponibles.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div *ngIf="loading" class="mt-2">Cargando...</div>
+        <div *ngIf="error" class="text-danger mt-2">{{ error }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal CREAR CITA -->
+<div class="modal fade" #crearCitaModal tabindex="-1" aria-labelledby="crearCitaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="crearCitaModalLabel">Crear Cita</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+
+          <!-- ID Servicio -->
+          <div class="mb-3">
+            <label for="id_servicio">ID Servicio</label>
+            <input 
+              type="text" 
+              id="id_servicio"
+              class="form-control"
+              [(ngModel)]="nuevaCita.id_servicio" 
+              name="id_servicio"
+            >
+          </div>
+
+          <!-- ID Animal -->
+          <div class="mb-3">
+            <label for="id_animal">ID Animal</label>
+            <input 
+              type="text" 
+              id="id_animal"
+              class="form-control"
+              [(ngModel)]="nuevaCita.id_animal" 
+              name="id_animal"
+            >
+          </div>
+
+          <!-- Fecha Atención -->
+          <div class="mb-3">
+            <label for="fecha_atencion">Fecha Atención</label>
+            <input 
+              type="datetime-local"
+              id="fecha_atencion"
+              class="form-control"
+              [(ngModel)]="nuevaCita.fecha_atencion" 
+              name="fecha_atencion"
+            >
+          </div>
+
+          <!-- ID Usuario Crea -->
+          <div class="mb-3">
+            <label for="id_usuario_crea">ID Usuario Crea</label>
+            <input 
+              type="text" 
+              id="id_usuario_crea"
+              class="form-control"
+              [(ngModel)]="nuevaCita.id_usuario_crea" 
+              name="id_usuario_crea"
+            >
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="crearCita()">Crear</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal EDITAR CITA -->
+<div class="modal fade" #editarCitaModal tabindex="-1" aria-labelledby="editarCitaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title" id="editarCitaModalLabel">Editar Cita</h5>
+        <button type="button" class="btn-close" (click)="cerrarModal()" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+
+          <!-- ID CITA (solo lectura) -->
+          <div class="mb-3">
+            <label>ID Cita</label>
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="citaForm.id_citas"
+              name="id_citas"
+              readonly
+            >
+          </div>
+
+          <!-- ID Servicio -->
+          <div class="mb-3">
+            <label>ID Servicio</label>
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="citaForm.id_servicio"
+              name="id_servicio"
+            >
+          </div>
+
+          <!-- ID Animal -->
+          <div class="mb-3">
+            <label>ID Animal</label>
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="citaForm.id_animal"
+              name="id_animal"
+            >
+          </div>
+
+          <!-- Fecha Atención -->
+          <div class="mb-3">
+            <label>Fecha Atención</label>
+            <input 
+              type="datetime-local"
+              class="form-control"
+              [(ngModel)]="citaForm.fecha_atencion"
+              name="fecha_atencion"
+            >
+          </div>
+
+          <!-- ID Usuario Edita -->
+          <div class="mb-3">
+            <label>ID Usuario Edita</label>
+            <input 
+              type="text"
+              class="form-control"
+              [(ngModel)]="citaForm.id_usuario_edita"
+              name="id_usuario_edita"
+            >
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button type="button" class="btn btn-warning text-white" (click)="guardarCambios()">Guardar Cambios</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
