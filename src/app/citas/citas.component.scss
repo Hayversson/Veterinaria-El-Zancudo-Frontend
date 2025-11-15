@@ -1,0 +1,95 @@
+/* ======== ENCABEZADO GENERAL ======== */
+.card-title {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* ======== TABLA ======== */
+.table {
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table thead th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  color: #344675;
+  border: none;
+  background-color: #f7f8fa;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease-in-out;
+  background-color: #fff;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+.table tbody tr:hover {
+  background-color: #f1f3f6;
+  transform: scale(1.01);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.table td {
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-top: 1px solid #e9ecef;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ======== TARJETAS ======== */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #eee;
+  padding: 1rem 1.25rem;
+}
+
+.card-header .title {
+  margin: 0;
+  font-weight: 600;
+  color: #344675;
+}
+
+/* ======== MENSAJE VACÍO ======== */
+.text-muted {
+  font-style: italic;
+  color: #999 !important;
+}
+
+/* ======== RESPONSIVE ======== */
+@media (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+
+  .table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    padding: 10px 15px;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #344675;
+  }
+}

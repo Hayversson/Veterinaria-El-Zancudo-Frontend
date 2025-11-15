@@ -10,6 +10,26 @@
       </div>
     </div>
 
+    <!--Buscar por ID de propietario -->
+<div class="row mb-3">
+  <div class="col-md-5">
+    <div class="d-flex align-items-center gap-2">
+      <input
+        type="text"
+        #propietarioIdInput
+        class="form-control form-control-sm"
+        placeholder="ID del propietario"
+      />
+      <button
+        class="btn btn-info btn-sm text-white"
+        (click)="buscarAnimalesPorPropietario(propietarioIdInput.value)"
+      >
+        <i class="bi bi-search"></i> Buscar
+      </button>
+    </div>
+  </div>
+</div>
+
     <div class="card">
       <div class="card-header">
         <h5 class="title">Listado de Animales</h5>
@@ -36,7 +56,7 @@
               <td>{{ animal.id_usuario }}</td>
               <td>{{ animal.id_animal }}</td>
               <td>{{ animal.id_genero }}</td>
-              <td>{{ animal.id_raza }}</td>
+              <td>{{ razasMap[animal.id_raza] }}</td>
               <td>{{ animal.fecha_creacion | date: 'short' }}</td>
               <td>{{ animal.fecha_edicion | date: 'short' }}</td>
               <td>
