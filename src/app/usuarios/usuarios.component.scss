@@ -31,6 +31,19 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
+.thin-input {
+  height: 32px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.thin-btn {
+  height: 32px;
+  padding: 4px 12px;
+  font-size: 14px;
+  line-height: 1;
+}
+
 .table td {
   padding: 0.75rem;
   vertical-align: middle;
